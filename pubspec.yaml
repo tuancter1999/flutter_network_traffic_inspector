@@ -1,0 +1,35 @@
+name: network_traffic_inspector
+description: >-
+  A draggable, floating HTTP & WebSocket debug overlay for Flutter apps.
+  Inspect live network traffic without leaving the app — no proxy setup required.
+version: 1.0.0
+
+homepage: https://github.com/YOUR_ORG/network_traffic_inspector
+repository: https://github.com/YOUR_ORG/network_traffic_inspector
+issue_tracker: https://github.com/YOUR_ORG/network_traffic_inspector/issues
+
+topics:
+  - debug
+  - network
+  - http
+  - websocket
+  - devtools
+
+environment:
+  sdk: ^3.6.2
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.8.0+1
+  http: ^1.2.0
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
