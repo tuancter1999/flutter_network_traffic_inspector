@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:network_traffic_inspector/network_traffic_inspector.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +15,7 @@ late final DebugHttpClient _httpClient;
 void main() {
   _dio = Dio(BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com'));
   if (kDebugMode) {
-    _dio.interceptors.add(DebugLogInterceptor());
+    _dio.interceptors.add(NetworkTrafficInterceptor());
   }
 
   _httpClient = DebugHttpClient(inner: http.Client());

@@ -7,7 +7,7 @@ import 'network/network_debug_bus.dart';
 import 'widget/detail_common.dart';
 
 class HttpRequestDetailSheet extends StatefulWidget {
-  final NetworkLogEntry entry;
+  final NetworkTrafficEntry entry;
   const HttpRequestDetailSheet({super.key, required this.entry});
 
   @override

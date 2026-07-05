@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'network/network_debug_bus.dart';
 
-typedef OnHttpSelect = Future<void> Function(NetworkLogEntry entry);
+typedef OnHttpSelect = Future<void> Function(NetworkTrafficEntry entry);
 typedef OnWsSelect = Future<void> Function(WsLogEvent event);
 
 class DebugOverlayPanel extends StatelessWidget {
@@ -211,7 +211,7 @@ class _HttpLogsStyledListState extends State<_HttpLogsStyledList> {
 }
 
 class _HttpLogTile extends StatelessWidget {
-  final NetworkLogEntry entry;
+  final NetworkTrafficEntry entry;
   final OnHttpSelect onTap;
   const _HttpLogTile({required this.entry, required this.onTap});
 

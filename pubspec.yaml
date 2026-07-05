@@ -16,8 +16,7 @@ topics:
   - devtools
 
 environment:
-  sdk: ^3.6.2
-  flutter: ">=3.27.0"
+  sdk: ^3.5.0
 
 dependencies:
   flutter:
