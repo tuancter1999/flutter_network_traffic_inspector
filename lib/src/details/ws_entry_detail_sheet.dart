@@ -1,19 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-
 import '../network/network_debug_bus.dart';
-import 'detail_common.dart';
+import '../helpers/network_traffic_helper.dart';
+import 'widgets/detail_common.dart';
 
-class WsDetailSheet extends StatefulWidget {
+class WsEntryDetailSheet extends StatefulWidget {
   final WsLogEvent event;
-  const WsDetailSheet({super.key, required this.event});
+  const WsEntryDetailSheet({super.key, required this.event});
 
   @override
-  State<WsDetailSheet> createState() => _WsDetailSheetState();
+  State<WsEntryDetailSheet> createState() => _WsEntryDetailSheetState();
 }
 
-class _WsDetailSheetState extends State<WsDetailSheet> {
+class _WsEntryDetailSheetState extends State<WsEntryDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final e = widget.event;
@@ -44,31 +42,15 @@ class _WsDetailSheetState extends State<WsDetailSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             children: [
               const DebugSectionTitle('Info'),
-              DebugCodeBlock(text: _toPrettyJson(info), filter: ''),
+              DebugCodeBlock(text: NetworkTrafficHelper.toPrettyJson(info), filter: ''),
               const SizedBox(height: 16),
               const DebugSectionTitle('Data'),
-              DebugCodeBlock(text: _toPrettyJson(e.originalData ?? e.data), filter: ''),
+              DebugCodeBlock(text: NetworkTrafficHelper.toPrettyJson(e.originalData ?? e.data), filter: ''),
               const SizedBox(height: 24),
             ],
           ),
         ),
       ],
     );
-  }
-}
-
-String _toPrettyJson(dynamic data) {
-  if (data == null) return '{}';
-  try {
-    if (data is String) {
-      final decoded = jsonDecode(data);
-      return const JsonEncoder.withIndent('  ').convert(decoded);
-    }
-    if (data is Map || data is List) {
-      return const JsonEncoder.withIndent('  ').convert(data);
-    }
-    return data.toString();
-  } catch (_) {
-    return data.toString();
   }
 }
