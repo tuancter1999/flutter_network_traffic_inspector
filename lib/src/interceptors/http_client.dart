@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:http/http.dart' as http;
-
-import 'network/network_debug_bus.dart';
+import '../network/network_debug_bus.dart';
 
 /// A drop-in [http.BaseClient] wrapper that logs every request/response into
 /// [NetworkDebugBus].
@@ -30,7 +28,7 @@ class DebugHttpClient extends http.BaseClient {
     final start = DateTime.now().millisecondsSinceEpoch;
 
     final id = _bus.startRequest(
-      DebugRequest(
+      NetworkRequest(
         method: request.method,
         uri: request.url,
         headers: Map<String, dynamic>.from(request.headers),
@@ -45,9 +43,9 @@ class DebugHttpClient extends http.BaseClient {
 
       _bus.completeRequest(
         id,
-        response: DebugResponse(
+        response: NetworkResponse(
           statusCode: streamed.statusCode,
-          headers: Map<String, dynamic>.from(streamed.headers),
+          // headers: Map<String, dynamic>.from(streamed.headers),
           body: _decodeBody(bytes, streamed.headers),
         ),
         durationMs: duration,

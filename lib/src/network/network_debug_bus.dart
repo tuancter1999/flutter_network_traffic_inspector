@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 /// Generic HTTP request snapshot, independent of any HTTP client library.
-class DebugRequest {
+class NetworkRequest {
   final String method;
   final Uri uri;
   final Map<String, dynamic> headers;
   final dynamic body;
 
-  const DebugRequest({
+  const NetworkRequest({
     required this.method,
     required this.uri,
     this.headers = const {},
@@ -19,24 +19,22 @@ class DebugRequest {
 }
 
 /// Generic HTTP response snapshot, independent of any HTTP client library.
-class DebugResponse {
+class NetworkResponse {
   final int statusCode;
-  final Map<String, dynamic> headers;
   final dynamic body;
 
-  const DebugResponse({
+  const NetworkResponse({
     required this.statusCode,
-    this.headers = const {},
     this.body,
   });
 }
 
 /// Represents a single HTTP request/response cycle captured by [NetworkDebugBus].
-class NetworkLogEntry {
+class NetworkTrafficEntry {
   final String id;
   final DateTime time;
-  final DebugRequest request;
-  final DebugResponse? response;
+  final NetworkRequest request;
+  final NetworkResponse? response;
 
   /// Non-null when the request completed with a network/transport error.
   final String? errorMessage;
@@ -46,7 +44,7 @@ class NetworkLogEntry {
 
   final int? durationMs;
 
-  const NetworkLogEntry({
+  const NetworkTrafficEntry({
     required this.id,
     required this.time,
     required this.request,
@@ -99,25 +97,24 @@ class WsLogEvent {
 ///
 /// Use the global [networkDebugBus] singleton or create a custom instance for
 /// testing / isolation.
-class NetworkDebugBus extends ChangeNotifier
-    implements ValueListenable<NetworkDebugBus> {
+class NetworkDebugBus extends ChangeNotifier implements ValueListenable<NetworkDebugBus> {
   static const int _maxLengthHttp = 80;
   static const int _maxLengthWs = 250;
 
-  final List<NetworkLogEntry> _http = <NetworkLogEntry>[];
+  final List<NetworkTrafficEntry> _http = <NetworkTrafficEntry>[];
   final List<WsLogEvent> _ws = <WsLogEvent>[];
   int _counter = 0;
 
-  UnmodifiableListView<NetworkLogEntry> get http => UnmodifiableListView(_http);
+  UnmodifiableListView<NetworkTrafficEntry> get http => UnmodifiableListView(_http);
   UnmodifiableListView<WsLogEvent> get ws => UnmodifiableListView(_ws);
 
   /// Records the start of an HTTP request and returns a unique [id] used to
   /// correlate the response or error via [completeRequest].
-  String startRequest(DebugRequest request) {
+  String startRequest(NetworkRequest request) {
     final id = '${_counter++}';
     _http.insert(
       0,
-      NetworkLogEntry(id: id, time: DateTime.now(), request: request),
+      NetworkTrafficEntry(id: id, time: DateTime.now(), request: request),
     );
     if (_http.length > _maxLengthHttp) {
       _http.removeLast();
@@ -129,7 +126,7 @@ class NetworkDebugBus extends ChangeNotifier
   /// Updates the log entry identified by [id] with the final response or error.
   void completeRequest(
     String id, {
-    DebugResponse? response,
+    NetworkResponse? response,
     String? errorMessage,
     dynamic errorBody,
     int? durationMs,
@@ -137,7 +134,7 @@ class NetworkDebugBus extends ChangeNotifier
     final index = _http.indexWhere((e) => e.id == id);
     if (index == -1) return;
     final old = _http[index];
-    _http[index] = NetworkLogEntry(
+    _http[index] = NetworkTrafficEntry(
       id: old.id,
       time: old.time,
       request: old.request,

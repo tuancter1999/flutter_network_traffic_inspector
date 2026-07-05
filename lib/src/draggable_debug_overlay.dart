@@ -53,7 +53,7 @@ class _DraggableDebugOverlayState extends State<DraggableDebugOverlay> with Sing
 
   BuildContext get _sheetContext => widget.navigatorKey.currentContext ?? context;
 
-  Future<void> _openHttpDetail(NetworkLogEntry entry) async {
+  Future<void> _openHttpDetail(NetworkTrafficEntry entry) async {
     setState(() {
       _panelVisible = false;
       _detailVisible = true;
