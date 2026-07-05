@@ -40,17 +40,13 @@ final navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DebugOverlayHost(
-      enabled: kDebugMode,          // show only in debug builds
+    return MaterialApp(
       navigatorKey: navigatorKey,
-      overlayBuilder: (_) => DraggableDebugOverlay(
+      home: const HomePage(),
+      builder: (context, child) => DebugOverlayHost(
+        enabled: kDebugMode,          // show only in debug builds
         navigatorKey: navigatorKey,
-        showWebSocketLogs: true,    // set false to hide WebSocket tab
-        onDisable: () { /* called when user closes the overlay */ },
-      ),
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        home: const HomePage(),
+        child: child,
       ),
     );
   }

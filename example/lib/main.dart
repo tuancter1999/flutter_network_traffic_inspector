@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-final _navigatorKey = GlobalKey<NavigatorState>();
-
 // ── HTTP clients ──────────────────────────────────────────────────────────────
 
 late final Dio _dio;
 late final DebugHttpClient _httpClient;
+final _navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   _dio = Dio(BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com'));
@@ -28,19 +27,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DebugOverlayHost(
-      // Remove or set to false in release builds.
-      enabled: kDebugMode,
+    return MaterialApp(
+      title: 'network_traffic_inspector example',
       navigatorKey: _navigatorKey,
-      overlayBuilder: (_) => DraggableDebugOverlay(
+      home: const _HomePage(),
+      builder: (context, child) => NetworkTrafficOverlay(
+        // Remove or set to false in release builds.
+        enabled: kDebugMode,
         navigatorKey: _navigatorKey,
-        // Enable the WebSocket tab in the overlay panel.
-        showWebSocketLogs: true,
-      ),
-      child: MaterialApp(
-        title: 'network_traffic_inspector example',
-        navigatorKey: _navigatorKey,
-        home: const _HomePage(),
+        child: child,
       ),
     );
   }
